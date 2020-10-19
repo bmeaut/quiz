@@ -32,12 +32,14 @@ namespace Quiz.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Question>> GetQuestion(int id)
         {
-            var question = await _context.question.FindAsync(id);
-            var answersToQuestions = from answers in _context.answer
-                                     where answers.QuestionID == question.Id
-                                     select answers;
+            var question = await _context.question
+                .Include(q=>q.anwsers)
+                .SingleOrDefaultAsync(q=>q.Id == id);
+            //var answersToQuestions = from answers in _context.answer
+            //                         where answers.QuestionID == question.Id
+            //                         select answers;
 
-            question.anwsers = answersToQuestions.ToList();
+            //question.anwsers = answersToQuestions.ToList();
 
             if (question == null)
             {
