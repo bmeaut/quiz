@@ -8,5 +8,6 @@ namespace Quiz.Models
 {
     public class ApplicationUser : IdentityUser
     {
+
     }
 }

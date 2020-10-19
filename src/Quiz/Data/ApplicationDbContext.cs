@@ -12,10 +12,14 @@ namespace Quiz.Data
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(
+        public DbSet<Question> question { get; set; }
+        public DbSet<Answer> answer { get; set; }
+
+public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
+
         }
     }
 }
