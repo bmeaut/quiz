@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,15 +26,15 @@ namespace Quiz.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Question>>> Getquestion()
         {
-            return await _context.question.ToListAsync();
+            return await _context.Questions.ToListAsync();
         }
 
         // GET: api/Questions/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Question>> GetQuestion(int id)
         {
-            var question = await _context.question
-                .Include(q=>q.anwsers)
+            var question = await _context.Questions
+                .Include(q=>q.Answers)
                 .SingleOrDefaultAsync(q=>q.Id == id);
             //var answersToQuestions = from answers in _context.answer
             //                         where answers.QuestionID == question.Id
@@ -87,7 +88,7 @@ namespace Quiz.Controllers
         [HttpPost]
         public async Task<ActionResult<Question>> PostQuestion(Question question)
         {
-            _context.question.Add(question);
+            _context.Questions.Add(question);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetQuestion", new { id = question.Id }, question);
@@ -97,22 +98,20 @@ namespace Quiz.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Question>> DeleteQuestion(int id)
         {
-            var question = await _context.question.FindAsync(id);
+            var question = await _context.Questions.FindAsync(id);
             if (question == null)
             {
                 return NotFound();
             }
-            // A kitorlendo kerdeshez tartozo valaszokat is toroljuk
-            var answersToDetele = from answer in _context.answer
-                                  where answer.QuestionID == id
-                                  select answer;
-            if (answersToDetele != null)
+            // A kitorlendo kerdeshez tartozo valaszokat is 
+            var answersToDetele = _context.Answers.Where(a => a.QuestionID == question.Id);
+            if (!answersToDetele.IsNullOrEmpty())
             {
                 foreach (Answer ans in answersToDetele)
-                    _context.answer.Remove(ans);
+                    _context.Answers.Remove(ans);
             }
 
-            _context.question.Remove(question);
+            _context.Questions.Remove(question);
             await _context.SaveChangesAsync();
 
             return question;
@@ -120,7 +119,7 @@ namespace Quiz.Controllers
 
         private bool QuestionExists(int id)
         {
-            return _context.question.Any(e => e.Id == id);
+            return _context.Questions.Any(e => e.Id == id);
         }
     }
 }

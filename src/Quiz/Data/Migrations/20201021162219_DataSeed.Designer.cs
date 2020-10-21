@@ -10,8 +10,8 @@ using Quiz.Data;
 namespace Quiz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201015133046_newTables")]
-    partial class newTables
+    [Migration("20201021162219_DataSeed")]
+    partial class DataSeed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -245,21 +245,107 @@ namespace Quiz.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("QuestionID")
                         .HasColumnType("int");
-
-                    b.Property<bool>("isCorrect")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionID");
 
-                    b.ToTable("answer");
+                    b.ToTable("Answers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsCorrect = true,
+                            Name = "Poszeidón és Medusza",
+                            QuestionID = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsCorrect = false,
+                            Name = "Gaia és Uranosz",
+                            QuestionID = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsCorrect = false,
+                            Name = "A nimfák gyermeke",
+                            QuestionID = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsCorrect = false,
+                            Name = "A titánok gyermeke",
+                            QuestionID = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsCorrect = false,
+                            Name = "Michael Jordan",
+                            QuestionID = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsCorrect = false,
+                            Name = "Magic Johnson",
+                            QuestionID = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            IsCorrect = false,
+                            Name = "Larry Bird",
+                            QuestionID = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            IsCorrect = true,
+                            Name = "Lebron James",
+                            QuestionID = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            IsCorrect = true,
+                            Name = "Kossuth Lajos Széchenyi Istvánt",
+                            QuestionID = 3
+                        },
+                        new
+                        {
+                            Id = 10,
+                            IsCorrect = false,
+                            Name = "Széchenyi István Kossuth Ferencet",
+                            QuestionID = 3
+                        },
+                        new
+                        {
+                            Id = 11,
+                            IsCorrect = false,
+                            Name = "Gyurcsány Ferenc Orbán Viktort",
+                            QuestionID = 3
+                        },
+                        new
+                        {
+                            Id = 12,
+                            IsCorrect = false,
+                            Name = "Orbán Lajos Gyurcsány Istvánt",
+                            QuestionID = 3
+                        });
                 });
 
             modelBuilder.Entity("Quiz.Models.ApplicationUser", b =>
@@ -336,15 +422,34 @@ namespace Quiz.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Text")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("question");
+                    b.ToTable("Questions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Mitológia",
+                            Text = "Kinek a gyermeke volt Pégaszosz(Pegazus) a szárnyas ló a görög mitológiában?"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Sport",
+                            Text = "Ki nem tagja a '92-es Dream Teamnek?"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Politika",
+                            Text = "Ki nevezett kit a legynagyobb magyarnak?"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -401,7 +506,7 @@ namespace Quiz.Data.Migrations
             modelBuilder.Entity("Quiz.Models.Answer", b =>
                 {
                     b.HasOne("Quiz.Models.Question", null)
-                        .WithMany("anwsers")
+                        .WithMany("Answers")
                         .HasForeignKey("QuestionID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

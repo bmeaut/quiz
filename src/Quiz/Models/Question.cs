@@ -13,10 +13,8 @@ namespace Quiz.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        [Column(TypeName = "nvarchar(500)")]
         public string Name{ get; set; }
-        [Required]
         public string Text { get; set; }
-        public virtual ICollection<Answer> anwsers { get; set; }
+        public virtual ICollection<Answer> Answers { get; set; }
     }
 }

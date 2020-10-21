@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Quiz.Data;
 
 namespace Quiz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201021151343_CreateTables")]
+    partial class CreateTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,92 +260,6 @@ namespace Quiz.Data.Migrations
                     b.HasIndex("QuestionID");
 
                     b.ToTable("Answers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsCorrect = true,
-                            Name = "Poszeidón és Medusza",
-                            QuestionID = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsCorrect = false,
-                            Name = "Gaia és Uranosz",
-                            QuestionID = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsCorrect = false,
-                            Name = "A nimfák gyermeke",
-                            QuestionID = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsCorrect = false,
-                            Name = "A titánok gyermeke",
-                            QuestionID = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IsCorrect = false,
-                            Name = "Michael Jordan",
-                            QuestionID = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IsCorrect = false,
-                            Name = "Magic Johnson",
-                            QuestionID = 2
-                        },
-                        new
-                        {
-                            Id = 7,
-                            IsCorrect = false,
-                            Name = "Larry Bird",
-                            QuestionID = 2
-                        },
-                        new
-                        {
-                            Id = 8,
-                            IsCorrect = true,
-                            Name = "Lebron James",
-                            QuestionID = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            IsCorrect = true,
-                            Name = "Kossuth Lajos Széchenyi Istvánt",
-                            QuestionID = 3
-                        },
-                        new
-                        {
-                            Id = 10,
-                            IsCorrect = false,
-                            Name = "Széchenyi István Kossuth Ferencet",
-                            QuestionID = 3
-                        },
-                        new
-                        {
-                            Id = 11,
-                            IsCorrect = false,
-                            Name = "Gyurcsány Ferenc Orbán Viktort",
-                            QuestionID = 3
-                        },
-                        new
-                        {
-                            Id = 12,
-                            IsCorrect = false,
-                            Name = "Orbán Lajos Gyurcsány Istvánt",
-                            QuestionID = 3
-                        });
                 });
 
             modelBuilder.Entity("Quiz.Models.ApplicationUser", b =>
@@ -428,26 +344,6 @@ namespace Quiz.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Questions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Mitológia",
-                            Text = "Kinek a gyermeke volt Pégaszosz(Pegazus) a szárnyas ló a görög mitológiában?"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Sport",
-                            Text = "Ki nem tagja a '92-es Dream Teamnek?"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Politika",
-                            Text = "Ki nevezett kit a legynagyobb magyarnak?"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -25,14 +25,14 @@ namespace Quiz.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Answer>>> Getanswer()
         {
-            return await _context.answer.ToListAsync();
+            return await _context.Answers.ToListAsync();
         }
 
         // GET: api/Answers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Answer>> GetAnswer(int id)
         {
-            var answer = await _context.answer.FindAsync(id);
+            var answer = await _context.Answers.FindAsync(id);
 
             if (answer == null)
             {
@@ -80,7 +80,7 @@ namespace Quiz.Controllers
         [HttpPost]
         public async Task<ActionResult<Answer>> PostAnswer(Answer answer)
         {
-            _context.answer.Add(answer);
+            _context.Answers.Add(answer);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetAnswer", new { id = answer.Id }, answer);
@@ -90,13 +90,13 @@ namespace Quiz.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Answer>> DeleteAnswer(int id)
         {
-            var answer = await _context.answer.FindAsync(id);
+            var answer = await _context.Answers.FindAsync(id);
             if (answer == null)
             {
                 return NotFound();
             }
 
-            _context.answer.Remove(answer);
+            _context.Answers.Remove(answer);
             await _context.SaveChangesAsync();
 
             return answer;
@@ -104,7 +104,7 @@ namespace Quiz.Controllers
 
         private bool AnswerExists(int id)
         {
-            return _context.answer.Any(e => e.Id == id);
+            return _context.Answers.Any(e => e.Id == id);
         }
     }
 }
