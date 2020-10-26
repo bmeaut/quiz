@@ -1,0 +1,58 @@
+<div class="container-contact100">
+  <div class="wrap-contact100">
+    <form class="contact100-form">
+      <span class="contact100-form-title">
+        Add new question
+      </span>
+
+      <div class="wrap-input100 bg1">
+        <span class="label-input100">QUESTION TEXT *</span>
+        <input [(ngModel)]="questionText"
+               class="input100" type="text" name="question"
+               placeholder="Enter question">
+      </div>
+
+      <div class="wrap-input100 bg1 rs1-wrap-input100">
+        <span class="label-input100">Answer 01 *</span>
+        <input [(ngModel)]="answer1"
+               class="input100" type="text" name="answer"
+               placeholder="Enter answer and check if correct ">
+        <input 
+               class="checkbox" for="exampleCheck1" type="checkbox">
+      </div>
+
+
+      <div class="wrap-input100 bg1 rs1-wrap-input100">
+        <span class="label-input100">Answer 02 *</span>
+        <input [(ngModel)]="answer2"
+               class="input100" type="text" name="answer" placeholder="Enter answer and check if correct ">
+        <input
+               class="checkbox form-check-inline" for="exampleCheck1" type="checkbox">
+      </div>
+
+      <div class="wrap-input100 bg1 rs1-wrap-input100">
+        <span class="label-input100">Answer 03 *</span>
+        <input [(ngModel)]="answer3"
+               class="input100" type="text" name="answer" placeholder="Enter answer and check if correct ">
+        <input
+               class="checkbox form-check-inline" for="exampleCheck1" type="checkbox">
+      </div>
+
+      <div class="wrap-input100 bg1 rs1-wrap-input100">
+        <span class="label-input100">Answer 04 *</span>
+        <input [(ngModel)]="answer4"
+               class="input100" type="text" name="answer" placeholder="Enter answer and check if correct ">
+        <input 
+               class="checkbox form-check-inline" for="exampleCheck1" type="checkbox">
+      </div>
+
+      <div class="container-contact100-form-btn">
+        <button class="contact100-form-btn" (click)="addQuestion()">
+          <span>
+            Add question
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -13,6 +13,8 @@ import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { StageComponent } from './stage/stage.component';
+import { QuestionEditComponent } from './question-edit/question-edit.component';
+import { QuestionListComponent } from './question-list/question-list.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { StageComponent } from './stage/stage.component';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    StageComponent
+    StageComponent,
+    QuestionEditComponent,
+    QuestionListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -33,6 +37,8 @@ import { StageComponent } from './stage/stage.component';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: 'stage', component: StageComponent },
+      { path: 'question-edit', component: QuestionEditComponent },
+      { path: 'question-list', component: QuestionListComponent }
     ])
   ],
   providers: [
