@@ -26,7 +26,8 @@ namespace Quiz.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Question>>> Getquestion()
         {
-            return await _context.Questions.ToListAsync();
+            
+            return await _context.Questions.Include(q => q.Answers).ToListAsync();
         }
 
         // GET: api/Questions/5
@@ -36,11 +37,6 @@ namespace Quiz.Controllers
             var question = await _context.Questions
                 .Include(q=>q.Answers)
                 .SingleOrDefaultAsync(q=>q.Id == id);
-            //var answersToQuestions = from answers in _context.answer
-            //                         where answers.QuestionID == question.Id
-            //                         select answers;
-
-            //question.anwsers = answersToQuestions.ToList();
 
             if (question == null)
             {
