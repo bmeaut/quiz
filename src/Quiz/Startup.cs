@@ -11,7 +11,6 @@ using Quiz.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Quiz.Hub;
 
 namespace Quiz
 {
@@ -48,7 +47,6 @@ namespace Quiz
             });
             //registering Swagger generator
             services.AddSwaggerGen();
-            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,7 +91,7 @@ namespace Quiz
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
-            app.UseSignalR(r => r.MapHub<QuizHub>("/quizhub"));
+
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
