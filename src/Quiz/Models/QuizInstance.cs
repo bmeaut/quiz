@@ -12,7 +12,7 @@ namespace Quiz.Models
         public int QuestionId { get; set; }
         public virtual AnswerInstance AnswerInstance { get; set; }
     }
-    public enum QuizState
+        public enum QuizState
     {
         Start,
         Showquestion,
