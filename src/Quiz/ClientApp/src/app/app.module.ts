@@ -15,6 +15,7 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { StageComponent } from './stage/stage.component';
 import { QuestionEditComponent } from './question-edit/question-edit.component';
 import { QuestionListComponent } from './question-list/question-list.component';
+import { LobbyComponent } from './lobby/lobby.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { QuestionListComponent } from './question-list/question-list.component';
     FetchDataComponent,
     StageComponent,
     QuestionEditComponent,
-    QuestionListComponent
+    QuestionListComponent,
+    LobbyComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -38,7 +40,8 @@ import { QuestionListComponent } from './question-list/question-list.component';
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: 'stage', component: StageComponent },
       { path: 'question-edit', component: QuestionEditComponent },
-      { path: 'question-list', component: QuestionListComponent }
+      { path: 'question-list', component: QuestionListComponent },
+      { path: 'lobby', component: LobbyComponent }
     ])
   ],
   providers: [

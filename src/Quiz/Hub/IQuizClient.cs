@@ -10,5 +10,6 @@ namespace Quiz.Hub
         Task ShowQuestion(int questionId);
         Task ShowAnswer(string question);
         Task ShowQuestionResult();
+        Task UserJoined(string[] users);
     }
 }
