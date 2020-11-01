@@ -7,6 +7,8 @@ namespace Quiz.Hub
 {
     public interface IQuizClient
     {
-        ///TODO
+        Task ShowQuestion(int questionId);
+        Task ShowAnswer(string question);
+        Task ShowQuestionResult();
     }
 }
