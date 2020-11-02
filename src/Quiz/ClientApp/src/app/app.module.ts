@@ -19,6 +19,7 @@ import { QuestionEditComponent } from './question-edit/question-edit.component';
 import { QuestionListComponent } from './question-list/question-list.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { UsersComponent}  from './users/users.component';
+import { LobbyComponent } from './lobby/lobby.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,11 @@ import { UsersComponent}  from './users/users.component';
     QuestionEditComponent,
     QuestionListComponent,
     LeaderboardComponent,
-    UsersComponent
+    UsersComponent,
+    StageComponent,
+    QuestionEditComponent,
+    QuestionListComponent,
+    LobbyComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -50,7 +55,8 @@ import { UsersComponent}  from './users/users.component';
       { path: 'question-edit', component: QuestionEditComponent },
       { path: 'question-list', component: QuestionListComponent },
       { path: 'leaderboard', component: LeaderboardComponent },
-      { path: 'users', component: UsersComponent }
+      { path: 'users', component: UsersComponent },
+      { path: 'lobby', component: LobbyComponent }
     ])
   ],
   providers: [

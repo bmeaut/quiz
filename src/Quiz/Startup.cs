@@ -11,6 +11,7 @@ using Quiz.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quiz.Hub;
 
 namespace Quiz
 {
@@ -45,6 +46,9 @@ namespace Quiz
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            //registering Swagger generator
+            services.AddSwaggerGen();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +73,13 @@ namespace Quiz
                 app.UseSpaStaticFiles();
             }
 
+            //Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Quiz app V1");
+            });
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -81,7 +92,7 @@ namespace Quiz
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
-
+            app.UseSignalR(r => r.MapHub<QuizHub>("/quizhub"));
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
@@ -94,6 +105,9 @@ namespace Quiz
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+            
+
         }
     }
 }
