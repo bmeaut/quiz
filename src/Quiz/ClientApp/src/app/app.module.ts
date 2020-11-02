@@ -12,6 +12,13 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { QuestionComponent } from './question/question.component';
+import {ChartComponent} from './chart/chart.component';
+import { StageComponent } from './stage/stage.component';
+import { QuestionEditComponent } from './question-edit/question-edit.component';
+import { QuestionListComponent } from './question-list/question-list.component';
+import { LeaderboardComponent } from './leaderboard/leaderboard.component';
+import { UsersComponent}  from './users/users.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +26,14 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    QuestionComponent,
+    ChartComponent,
+    StageComponent,
+    QuestionEditComponent,
+    QuestionListComponent,
+    LeaderboardComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -29,7 +43,14 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
+      { path: 'question', component: QuestionComponent},
+      { path: 'chart', component: ChartComponent},
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
+      { path: 'stage', component: StageComponent },
+      { path: 'question-edit', component: QuestionEditComponent },
+      { path: 'question-list', component: QuestionListComponent },
+      { path: 'leaderboard', component: LeaderboardComponent },
+      { path: 'users', component: UsersComponent }
     ])
   ],
   providers: [
