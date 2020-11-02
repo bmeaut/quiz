@@ -20,6 +20,8 @@ import { QuestionListComponent } from './question-list/question-list.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { UsersComponent}  from './users/users.component';
 import { LobbyComponent } from './lobby/lobby.component';
+import { QuizUserComponent } from './quiz-user/quiz-user.component';
+import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import { LobbyComponent } from './lobby/lobby.component';
     StageComponent,
     QuestionEditComponent,
     QuestionListComponent,
-    LobbyComponent
+    LobbyComponent,
+    QuizUserComponent,
+    LoobyOutlookComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -56,7 +60,9 @@ import { LobbyComponent } from './lobby/lobby.component';
       { path: 'question-list', component: QuestionListComponent },
       { path: 'leaderboard', component: LeaderboardComponent },
       { path: 'users', component: UsersComponent },
-      { path: 'lobby', component: LobbyComponent }
+      { path: 'lobby', component: LobbyComponent },
+      { path: 'lobby-outlook', component: LoobyOutlookComponent },
+      { path: 'quiz-user', component: QuizUserComponent }
     ])
   ],
   providers: [
