@@ -11,6 +11,7 @@ namespace Quiz.Models
         public QuizState State { get; set; }
         public int QuestionId { get; set; }
         public virtual AnswerInstance AnswerInstance { get; set; }
+
     }
         public enum QuizState
     {
