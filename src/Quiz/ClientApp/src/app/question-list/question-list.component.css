@@ -223,6 +223,14 @@ iframe {
   margin-bottom: 20px;
 }
 
+.wrap-edit-question {
+  width: 100%;
+  background: #f7f7f7;
+  position: relative;
+  border-radius: 13px;
+  padding: 10px 30px 9px 22px;
+  margin-bottom: 20px;
+}
 
   .wrap-input100 i {
     -webkit-transition: all 0.4s;
@@ -250,6 +258,17 @@ iframe {
   margin-bottom: 20px;
   margin-left: 35px;
 }
+
+.edit-answer {
+  width: 90%;
+  position: relative;
+  border: 1px solid #e6e6e6;
+  border-radius: 13px;
+  padding: 10px 30px 9px 22px;
+  margin-bottom: 20px;
+  margin-left: 35px;
+}
+
 .correct-btn {
   cursor: pointer;
   display: -webkit-box;
@@ -259,7 +278,7 @@ iframe {
   display: flex;
   align-items: center;
   justify-content: center;
-  vertical-align:central;
+ 
   position: absolute;
   width: 30px;
   height: 30px;

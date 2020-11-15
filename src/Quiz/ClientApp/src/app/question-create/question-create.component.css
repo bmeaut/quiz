@@ -39,6 +39,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
+
   font-size: 14px;
   line-height: 1.7;
   color: #666666;
@@ -59,6 +60,7 @@ input {
 
   input[type="number"] {
     -moz-appearance: textfield;
+
     -webkit-appearance: none;
   }
 
@@ -67,9 +69,9 @@ input {
       -webkit-appearance: none;
     }
 
-  input.invalid {
-    border-color: red;
-  }
+input.invalid {
+  border-color: red;
+}
 
 textarea {
   outline: none;
@@ -198,6 +200,7 @@ iframe {
 .wrap-contact100 {
   width: 920px;
   background: #fff;
+
   overflow: hidden;
   padding: 0px 55px 90px 55px;
 }
@@ -690,3 +693,4 @@ span.contact100-form-subtitle {
   right: 12px;
   padding-bottom: 5px;
 }
+

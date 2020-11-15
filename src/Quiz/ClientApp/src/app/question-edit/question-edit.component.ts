@@ -1,9 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Answer, Question, QuestionListComponent } from '../question-list/question-list.component';
+import { Question } from '../shared/question';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, NgForm } from '@angular/forms';
+import { QuestionCrudService } from '../shared/question-crud.service';
 
 @Component({
   selector: 'app-question-edit',
@@ -11,35 +10,35 @@ import { FormBuilder } from '@angular/forms';
   styleUrls: ['./question-edit.component.css']
 })
 
-export class QuestionEditComponent implements OnInit {
-  questionForm;
-  constructor(private httpClient: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router) {}
-  
+export class QuestionEditComponent  {
 
-  addQuestion(): void {
-    /*
-     var a1: Answer = {
-      id : 0,
-      name : "válasz1!",
-      questionID : 0,
-      isCorrect : true
-    }
-    var a2: Answer = {
-      id: 0,
-      name: "válasz2!",
-      questionID: 0,
-      isCorrect: false
+  questionEdit: NgForm;
+
+  static question: Question = {
+    id: 0,
+    name: "",
+    text: "",
+    answers: [{ id: 0, name: "", questionID: 0, isCorrect: false },
+    { id: 0, name: "", questionID: 0, isCorrect: false },
+    { id: 0, name: "", questionID: 0, isCorrect: false },
+    { id: 0, name: "", questionID: 0, isCorrect: false }]
+  };
+
+  formData: Question = QuestionEditComponent.question;
+
+  constructor(private service: QuestionCrudService, private router: Router) { }
+
+  onSubmit(questionEditForm: NgForm) {
+    for (var i = 0; i < this.formData.answers.length; i++) {
+      this.service.putAnswer(this.formData.answers[i], this.formData.answers[i].id).subscribe();
     }
 
-    var q: Question = {
-      id: 0,
-      name: "matek",
-      text: "kérdés?",
-      answers : [a1, a2]
-    };
-    */
-    this.router.navigate(['/question-list']);
+    this.service.putQuestion(this.formData, QuestionEditComponent.question.id).subscribe(
+      question => {
+        this.service.refreshQuestions();
+        this.router.navigate(['/question-list']);
+      },
+      err => { console.log(err); }
+    )
   }
-  ngOnInit() { }
-
 }

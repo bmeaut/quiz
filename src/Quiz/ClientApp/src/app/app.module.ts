@@ -15,8 +15,10 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { QuestionComponent } from './question/question.component';
 import {ChartComponent} from './chart/chart.component';
 import { StageComponent } from './stage/stage.component';
-import { QuestionEditComponent } from './question-edit/question-edit.component';
+import { QuestionCrudService } from './shared/question-crud.service';
+import { QuestionCreateComponent } from './question-create/question-create.component';
 import { QuestionListComponent } from './question-list/question-list.component';
+import { QuestionEditComponent } from './question-edit/question-edit.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { UsersComponent}  from './users/users.component';
 import { LobbyComponent } from './lobby/lobby.component';
@@ -33,13 +35,12 @@ import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
     QuestionComponent,
     ChartComponent,
     StageComponent,
-    QuestionEditComponent,
+    QuestionCreateComponent,
     QuestionListComponent,
+    QuestionEditComponent,
     LeaderboardComponent,
     UsersComponent,
     StageComponent,
-    QuestionEditComponent,
-    QuestionListComponent,
     LobbyComponent,
     QuizUserComponent,
     LoobyOutlookComponent
@@ -56,6 +57,7 @@ import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
       { path: 'chart', component: ChartComponent},
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: 'stage', component: StageComponent },
+      { path: 'question-create', component: QuestionCreateComponent },
       { path: 'question-edit', component: QuestionEditComponent },
       { path: 'question-list', component: QuestionListComponent },
       { path: 'leaderboard', component: LeaderboardComponent },
@@ -66,7 +68,8 @@ import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
     ])
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+    QuestionCrudService 
   ],
   bootstrap: [AppComponent]
 })

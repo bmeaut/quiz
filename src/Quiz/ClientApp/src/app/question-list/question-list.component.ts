@@ -1,20 +1,9 @@
-import { Component, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-export interface Answer {
-  id: number;
-  name: string;
-  questionID: number;
-  isCorrect: boolean;
-}
-
-export interface Question {
-  id: number;
-  name: string;
-  text: string;
-  answers: Answer[];
-}
+import { QuestionCrudService } from '../shared/question-crud.service';
+import { QuestionEditComponent } from '../question-edit/question-edit.component';
+import { Question } from '../shared/question';
+import { Answer } from '../shared/answer';
 
 @Component({
   selector: 'app-question-list',
@@ -22,13 +11,46 @@ export interface Question {
   styleUrls: ['./question-list.component.css']
 })
 
-export class QuestionListComponent {
+export class QuestionListComponent implements OnInit{
 
-  public questions: Question[];
-  public answers: Answer[];
+  questions: Question[];
 
-  public lastActiveQuestion: Question = null;
-  public selectedQuestion: Question = null;
+  lastActiveQuestion: Question = null;
+  selectedQuestion: Question = null;
+
+  constructor(private service: QuestionCrudService, private router: Router) {
+    if (this.service.addedQuestionSubscription == undefined) {
+      this.service.addedQuestionSubscription = this.service.invokeAddedQuestion.subscribe((res: Question) => {
+        this.addQuestionResult(res);
+      });
+    }
+    if (this.service.questionListRefresh == undefined) {
+      this.service.questionListRefresh = this.service.invokeQuestionListRefresh.subscribe(() => {
+        this.fetchQuestionList();
+      });
+    }
+  }
+
+  ngOnInit() {
+    this.fetchQuestionList();
+  }
+
+  fetchQuestionList() {
+    this.service.getQuestions().subscribe(result => {
+      this.questions = result;
+    }, error => console.error(error));
+  }
+
+  addQuestionResult(res: Question) {
+    this.questions.push(res);
+  }
+
+  deleteSelectedQuestion(question: Question): void {
+    this.questions = this.questions.filter(({ id }) => id !== question.id);
+    this.service.deleteQuestion(question.id).subscribe(res => {
+      this.fetchQuestionList();
+    }, error => { console.log(error); })
+  }
 
   onSelect(question: Question): void {
     this.selectedQuestion = question;
@@ -38,22 +60,16 @@ export class QuestionListComponent {
     this.lastActiveQuestion = this.selectedQuestion;
   }
 
-  delete(question: Question): void {
-    this.questions = this.questions.filter(({ id }) => id !== question.id);
-  }
-
   addQuestion(): void {
-    this.router.navigate(['/question-edit']); 
+    this.router.navigate(['/question-create']); 
   }
 
-  constructor(httpClient: HttpClient, @Inject('BASE_URL') baseUrl: string, private router: Router) {
-    httpClient.get<Question[]>(baseUrl + 'api/Questions').subscribe(result => {
-      this.questions = result;
-    }, error => console.error(error));
-
-    httpClient.get<Answer[]>(baseUrl + 'api/Answers').subscribe(result => {
-      this.answers = result;
-    }, error => console.error(error));
+  editQuestion(): void {
+    QuestionEditComponent.question = this.selectedQuestion;
+    this.router.navigate(['/question-edit']);
   }
+
 }
+
+
 
