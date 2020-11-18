@@ -4,9 +4,9 @@ import * as signalR from '@aspnet/signalr';
   providedIn: 'root'
 })
 export class HubBuilderService {
-  getConnection() {
+  getConnection(url: string) {
     return new signalR.HubConnectionBuilder()
-      .withUrl("/quizhub")
+      .withUrl(url)
       .configureLogging(signalR.LogLevel.Information)
       .build();
   } 

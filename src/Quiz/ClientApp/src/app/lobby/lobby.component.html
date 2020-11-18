@@ -1,1 +1,22 @@
-<p>lobby works!</p>
+
+<div class="main-container">
+  <div class="question-and-timer-container">
+    <div class="question" id="question">
+      <p> {{currentQuestion?.question}}</p>
+    </div>
+  </div>
+  <div class="answer-container">
+    <button class="answer" id="answerA" (click)="answerSelected($event)">{{ currentQuestion?.answers[0] }}</button>
+    <button class="answer" id="answerB" (click)="answerSelected($event)">{{ currentQuestion?.answers[1] }}</button>
+  </div>
+  <div class="answer-container">
+    <button class="answer" id="answerC" (click)="answerSelected($event)">{{ currentQuestion?.answers[2] }}</button>
+    <button class="answer" id="answerD" (click)="answerSelected($event)">{{ currentQuestion?.answers[3] }}</button>
+  </div>
+
+  <button (click)="showQuestion()">Next Question</button>
+</div>
+
+<div id="answersdiv">
+
+</div>

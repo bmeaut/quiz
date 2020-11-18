@@ -8,8 +8,10 @@ namespace Quiz.Hub
     public interface IQuizClient
     {
         Task ShowQuestion(int questionId);
-        Task ShowAnswer(string question);
+        Task ShowAnswer(string answer, string user);
         Task ShowQuestionResult();
         Task UserJoined(string[] users);
+        Task StartGame();
+        Task Next();
     }
 }

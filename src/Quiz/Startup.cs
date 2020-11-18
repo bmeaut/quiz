@@ -37,6 +37,15 @@ namespace Quiz
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder
+                .WithOrigins("http://localhost:4200")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+            });
+
             services.AddAuthentication()
                 .AddIdentityServerJwt();
             services.AddControllersWithViews();
@@ -91,8 +100,10 @@ namespace Quiz
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<QuizHub>("/lobby");
+                endpoints.MapHub<QuizHub>("/lobby-outlook");
             });
-            app.UseSignalR(r => r.MapHub<QuizHub>("/quizhub"));
+            app.UseCors("CorsPolicy");
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
