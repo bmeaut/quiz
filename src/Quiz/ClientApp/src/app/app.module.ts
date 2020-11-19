@@ -22,6 +22,7 @@ import { UsersComponent}  from './users/users.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { QuizUserComponent } from './quiz-user/quiz-user.component';
 import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
+import { UserBaseComponent } from './user-base/user-base.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
     QuestionListComponent,
     LobbyComponent,
     QuizUserComponent,
-    LoobyOutlookComponent
+    LoobyOutlookComponent,
+    UserBaseComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -62,7 +64,9 @@ import { LoobyOutlookComponent } from './looby-outlook/looby-outlook.component';
       { path: 'users', component: UsersComponent },
       { path: 'lobby', component: LobbyComponent },
       { path: 'lobby-outlook', component: LoobyOutlookComponent },
-      { path: 'quiz-user', component: QuizUserComponent }
+      { path: 'quiz-user', component: QuizUserComponent },
+      { path: 'user-base', component: UserBaseComponent }
+
     ])
   ],
   providers: [
