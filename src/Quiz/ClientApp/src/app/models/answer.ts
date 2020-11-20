@@ -23,3 +23,8 @@ export class QuestionInstance {
     this.question = question;
   }
 }
+
+export interface User {
+  id: string;
+  name: string;
+}

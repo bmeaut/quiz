@@ -100,8 +100,8 @@ namespace Quiz
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-                endpoints.MapHub<QuizHub>("/lobby");
-                endpoints.MapHub<QuizHub>("/lobby-outlook");
+                endpoints.MapHub<QuizHub>("/quizhub");
+                
             });
             app.UseCors("CorsPolicy");
             app.UseSpa(spa =>

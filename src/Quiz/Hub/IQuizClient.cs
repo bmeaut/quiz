@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Quiz.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,10 +8,11 @@ namespace Quiz.Hub
 {
     public interface IQuizClient
     {
-        Task ShowQuestion(int questionId);
+        Task ShowQuestion(Question question);
         Task ShowAnswer(string answer, string user);
         Task ShowQuestionResult();
-        Task UserJoined(string[] users);
+        Task UserJoined(User user);
+        Task SetUsers(List<User> users);
         Task StartGame();
         Task Next();
     }

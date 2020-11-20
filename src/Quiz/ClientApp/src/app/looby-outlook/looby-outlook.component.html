@@ -4,9 +4,9 @@
     <div class="loader"></div>
     <div *ngFor="let user of users" >
         <div>
-          {{user}}
+          {{user.name}}
         </div>
     </div>
-    <button class="btn" (click)="startGame()">Start Game</button>
+    <button class="btn" (click)="onStart()">Start Game</button>
 
 </div>

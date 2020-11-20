@@ -8,7 +8,7 @@ namespace Quiz.Models
 {
     public class User
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public string Name { get; set; }
         public virtual ICollection<AnswerInstance> submittedAnswers { get; set; }
     }

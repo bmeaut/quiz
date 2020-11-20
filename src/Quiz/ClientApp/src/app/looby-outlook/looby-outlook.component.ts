@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HubBuilderService } from '../services/hub-builder.service';
 import { Router } from '@angular/router';
 import * as signalR from '@aspnet/signalr'
+import { User } from '../models/answer';
+
 
 @Component({
   selector: 'app-looby-outlook',
@@ -10,16 +12,18 @@ import * as signalR from '@aspnet/signalr'
 })
 export class LoobyOutlookComponent implements OnInit {
 
-  users: string[]
+  users: User[]
 
   connection: signalR.HubConnection
 
   constructor(private router: Router, hubbuilder: HubBuilderService) {
     this.users = [];
-    this.connection = hubbuilder.getConnection("/lobby-outlook")
+    this.connection = hubbuilder.getConnection()
 
     this.connection.on("Start", () => this.startGame());
-    this.connection.on("UserJoined", users => this.userJoined(users))
+    this.connection.on("UserJoined", users => this.userJoined(users));
+    this.connection.on("SetUsers", users => this.setUsers(users));
+    this.connection.on("StartGame", () => this.startGame());
     this.connection.start().then(() => {
       this.connection.invoke("EnterLobby");
     });
@@ -31,13 +35,13 @@ export class LoobyOutlookComponent implements OnInit {
   }
 
 
-  setUsers(users: string[]) {
-    this.users = users
+  setUsers(users: User[]) {
+    this.users = users;
   }
 
-  userJoined(users: string[]) {
+  userJoined(user: User) {
     console.log("User joined!")
-    this.users = users;
+    this.users.push(user);
   }
 
   onStart() {

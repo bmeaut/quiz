@@ -10,34 +10,70 @@ namespace Quiz.Hub
 {
     public class QuizHub : Hub<IQuizClient>
     {
-        private readonly ApplicationDbContext _context;
 
-        private List<string> users = new List<string>();
         Random r = new Random();
 
-        public static HubRoom Lobby { get; } = new HubRoom();
+        public static HubRoom Lobby { get; } = new HubRoom 
+        { 
+            Name = "QuizRoom"
+        
+        };
 
         public class HubRoom
         {
+
+            public HubRoom()
+            {
+                initQuestions();
+            }
+
             public string Name { get; set; }
+
+
+            public List<Question> questions = new List<Question>();
+
+
 
             public List<User> users = new List<User>();
 
-            public List<Question> questions = new List<Question>();
+
+            public void initQuestions()
+            {
+                
+            }
         }
 
         public async Task EnterLobby()
         {
-            var user = "guestuser" + r.Next(0, 100);
+            var user = new User
+            {
+                UserId = r.Next(0,100).ToString(),
+                Name = "user"+r.Next(0,100)
+            };
 
-            users.Add(user);
-          
-          await Clients.All.UserJoined(users.ToArray());
+            Lobby.users.Add(user);
+            await Clients.Group(Lobby.Name).UserJoined(user);
+            await Groups.AddToGroupAsync(user.UserId, Lobby.Name);
+            await Clients.All.SetUsers(Lobby.users);
+            
         }
 
-        public Task Start()
+        public async Task Start()
         {
-            return Clients.All.StartGame();
+            
+            await Clients.All.StartGame();
+        }
+
+        public async Task ShowAnswer(int questionId)
+        {
+
+        }
+
+        public async Task ShowQuestion(int questionId)
+        {
+            Question q = Lobby.questions[questionId];
+
+            await Clients.All.ShowQuestion(q);
         }
     }
 }

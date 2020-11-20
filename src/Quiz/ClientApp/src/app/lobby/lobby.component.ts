@@ -22,11 +22,13 @@ export class LobbyComponent implements OnInit {
 
   constructor(hubBuilder: HubBuilderService) {
     this.currentQuestionId = 0;
-    this.connection = hubBuilder.getConnection("/lobby");
-    this.connection.start();
-    //Register server event handlers
-    this.connection.on("UserJoined", user => this.userJoined(user));
-    this.connection.on("ShowQuestion", qi => this.showQuestion());
+    this.connection = hubBuilder.getConnection();
+    this.connection.start().then(() => {
+      this.connection.invoke("ShowQuestion", 0)
+    });
+
+
+    this.connection.on("ShowQuestion", qi => this.showQuestion(qi));
     this.connection.on("ShowAnswer", (answer, user) => this.showAnswer(answer, user));
   }
 
@@ -39,12 +41,9 @@ export class LobbyComponent implements OnInit {
     this.connection.invoke("ShowQuestion");
   }
 
-  showQuestion() {
+  showQuestion(q: QuestionInstance) {
     const ids: string[] = ["answerA", "answerB", "answerC", "answerD"];
-    let qi = new QuestionInstance("asd", ["aa", "bb", "cc", "dd"]);
-    console.log(qi.question);
-    console.log(qi.answers);
-    this.currentQuestion = qi;
+    this.currentQuestion = q;
     let answer;
     for (let id of ids) {
       answer = <HTMLInputElement>document.getElementById(id);
