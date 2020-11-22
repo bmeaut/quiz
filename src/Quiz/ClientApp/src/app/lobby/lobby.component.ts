@@ -13,7 +13,7 @@ import { QuestionCrudService } from '../shared/question-crud.service';
   templateUrl: './lobby.component.html',
   styleUrls: ['./lobby.component.css']
 })
-export class LobbyComponent implements OnInit {
+export class LobbyComponent {
 
   users: string[];
 
@@ -26,23 +26,19 @@ export class LobbyComponent implements OnInit {
   connection: signalR.HubConnection;
 
   constructor(private service: QuestionCrudService, hubBuilder: HubBuilderService) {
-    this.questions = [];
-
-    this.getQuestions();
 
     this.connection = hubBuilder.getConnection();
+    this.currentQuestionId = 0;
 
     this.connection.on("ShowQuestion", qId => this.showQuestion(qId));
     this.connection.on("ShowAnswer", (answer, user) => this.showAnswer(answer, user));
 
-    this.currentQuestionId = 0;
-    this.connection = hubBuilder.getConnection();
+    this.questions = [];
+    this.getQuestions();
+
     this.connection.start().then(() => {
       this.connection.invoke("SendQuestion", 0)
     });
-  }
-
-  ngOnInit() {
   }
 
   nextQuestion() {

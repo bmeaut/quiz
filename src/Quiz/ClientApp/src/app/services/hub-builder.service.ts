@@ -7,7 +7,7 @@ export class HubBuilderService {
   getConnection() {
     return new signalR.HubConnectionBuilder()
       .withUrl("/quizhub")
-      .configureLogging(signalR.LogLevel.Information)
+      .configureLogging(signalR.LogLevel.Debug)
       .build();
   } 
 }
