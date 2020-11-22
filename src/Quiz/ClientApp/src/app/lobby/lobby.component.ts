@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as signalR from '@aspnet/signalr';
 import { HubBuilderService } from '../services/hub-builder.service';
-import { Answer, QuestionInstance, UserAnswer, UserResult } from '../models/answer';
+import { Answer } from '../shared/answer';
+import { Question } from '../shared/question';
 import { abort } from 'process';
+import { HttpClient } from '@angular/common/http';
+import { QuestionCrudService } from '../shared/question-crud.service';
 
 @Component({
   selector: 'app-lobby',
@@ -14,22 +17,29 @@ export class LobbyComponent implements OnInit {
 
   users: string[];
 
-  currentQuestion: QuestionInstance;
+  questions: Question[];
+
+  currentQuestion: Question;
   currentQuestionId: number;
-  currentAnswers: string[];
+  currentAnswers: Answer[];
 
   connection: signalR.HubConnection;
 
-  constructor(hubBuilder: HubBuilderService) {
+  constructor(private service: QuestionCrudService, hubBuilder: HubBuilderService) {
+    this.questions = [];
+
+    this.getQuestions();
+
+    this.connection = hubBuilder.getConnection();
+
+    this.connection.on("ShowQuestion", qId => this.showQuestion(qId));
+    this.connection.on("ShowAnswer", (answer, user) => this.showAnswer(answer, user));
+
     this.currentQuestionId = 0;
     this.connection = hubBuilder.getConnection();
     this.connection.start().then(() => {
-      this.connection.invoke("ShowQuestion", 0)
+      this.connection.invoke("SendQuestion", 0)
     });
-
-
-    this.connection.on("ShowQuestion", qi => this.showQuestion(qi));
-    this.connection.on("ShowAnswer", (answer, user) => this.showAnswer(answer, user));
   }
 
   ngOnInit() {
@@ -38,12 +48,15 @@ export class LobbyComponent implements OnInit {
   nextQuestion() {
 
     this.currentAnswers = null;
-    this.connection.invoke("ShowQuestion");
+    this.connection.invoke("SendQuestion", this.currentQuestionId+1);
   }
 
-  showQuestion(q: QuestionInstance) {
+  showQuestion(id: number) {
     const ids: string[] = ["answerA", "answerB", "answerC", "answerD"];
-    this.currentQuestion = q;
+
+    this.currentQuestion = this.questions[id];
+    this.currentQuestionId = id;
+
     let answer;
     for (let id of ids) {
       answer = <HTMLInputElement>document.getElementById(id);
@@ -57,11 +70,7 @@ export class LobbyComponent implements OnInit {
     
   }
 
-  showQuestionResult(userResults: UserResult[]) {
-    
-  }
-
-  showQuizResults(userResults: UserResult[]) {
+  showQuizResults(userResults: string[]) {
 
   }
 
@@ -69,6 +78,13 @@ export class LobbyComponent implements OnInit {
     this.users.push(username);
   }
 
+  getQuestions() {
+    this.service.getQuestions().subscribe(resp => {
+      this.questions = resp;
+    }, error => console.error(error));
+
+    
+  }
   
 
   answerSelected(event: Event): void {

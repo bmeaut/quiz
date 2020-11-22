@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HubBuilderService } from '../services/hub-builder.service';
 import { Router } from '@angular/router';
 import * as signalR from '@aspnet/signalr'
@@ -30,6 +30,7 @@ export class LoobyOutlookComponent implements OnInit {
     
 
   }
+
   ngOnInit(): void {
     
   }
@@ -40,7 +41,6 @@ export class LoobyOutlookComponent implements OnInit {
   }
 
   userJoined(user: User) {
-    console.log("User joined!")
     this.users.push(user);
   }
 

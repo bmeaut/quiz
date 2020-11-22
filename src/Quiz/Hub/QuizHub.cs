@@ -22,25 +22,13 @@ namespace Quiz.Hub
         public class HubRoom
         {
 
-            public HubRoom()
-            {
-                initQuestions();
-            }
-
             public string Name { get; set; }
-
-
-            public List<Question> questions = new List<Question>();
 
 
 
             public List<User> users = new List<User>();
 
 
-            public void initQuestions()
-            {
-                
-            }
         }
 
         public async Task EnterLobby()
@@ -52,8 +40,7 @@ namespace Quiz.Hub
             };
 
             Lobby.users.Add(user);
-            await Clients.Group(Lobby.Name).UserJoined(user);
-            await Groups.AddToGroupAsync(user.UserId, Lobby.Name);
+            await Clients.Others.UserJoined(user);
             await Clients.All.SetUsers(Lobby.users);
             
         }
@@ -69,11 +56,11 @@ namespace Quiz.Hub
 
         }
 
-        public async Task ShowQuestion(int questionId)
+        public async Task SendQuestion(int questionId)
         {
-            Question q = Lobby.questions[questionId];
-
-            await Clients.All.ShowQuestion(q);
+            Console.WriteLine();
+            Console.WriteLine("Calling ShowQuestion with id: "+questionId);
+            await Clients.All.ShowQuestion(questionId);
         }
     }
 }
