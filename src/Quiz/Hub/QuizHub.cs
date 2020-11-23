@@ -62,5 +62,10 @@ namespace Quiz.Hub
             Console.WriteLine("Calling ShowQuestion with id: "+questionId);
             await Clients.All.ShowQuestion(questionId);
         }
+
+        public async Task EndGame()
+        {
+            await Clients.All.ShowResults();
+        }
     }
 }

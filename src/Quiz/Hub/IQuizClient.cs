@@ -15,5 +15,6 @@ namespace Quiz.Hub
         Task SetUsers(List<User> users);
         Task StartGame();
         Task Next();
+        Task ShowResults();
     }
 }

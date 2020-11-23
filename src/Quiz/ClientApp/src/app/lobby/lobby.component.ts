@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { Router } from '@angular/router';
 import * as signalR from '@aspnet/signalr';
 import { HubBuilderService } from '../services/hub-builder.service';
@@ -13,7 +13,7 @@ import { QuestionCrudService } from '../shared/question-crud.service';
   templateUrl: './lobby.component.html',
   styleUrls: ['./lobby.component.css']
 })
-export class LobbyComponent {
+export class LobbyComponent implements OnInit {
 
   users: string[];
 
@@ -25,23 +25,30 @@ export class LobbyComponent {
 
   connection: signalR.HubConnection;
 
-  constructor(private service: QuestionCrudService, hubBuilder: HubBuilderService) {
+  constructor(private service: QuestionCrudService, hubBuilder: HubBuilderService, private router: Router) {
 
     this.connection = hubBuilder.getConnection();
     this.currentQuestionId = 0;
+    
 
     this.connection.on("ShowQuestion", qId => this.showQuestion(qId));
     this.connection.on("ShowAnswer", (answer, user) => this.showAnswer(answer, user));
-
-    this.questions = [];
+    this.connection.on("ShowResults", () => this.showQuizResults());
+  }
+  ngOnInit(): void {
     this.getQuestions();
-
     this.connection.start().then(() => {
       this.connection.invoke("SendQuestion", 0)
     });
   }
 
   nextQuestion() {
+
+    var nextId = this.currentQuestionId + 1;
+
+    if (nextId == this.questions.length) {
+      this.connection.invoke("EndGame");
+    }
 
     this.currentAnswers = null;
     this.connection.invoke("SendQuestion", this.currentQuestionId+1);
@@ -51,6 +58,7 @@ export class LobbyComponent {
     const ids: string[] = ["answerA", "answerB", "answerC", "answerD"];
 
     this.currentQuestion = this.questions[id];
+
     this.currentQuestionId = id;
 
     let answer;
@@ -66,8 +74,8 @@ export class LobbyComponent {
     
   }
 
-  showQuizResults(userResults: string[]) {
-
+  showQuizResults() {
+    this.router.navigate(['/stage']);
   }
 
   userJoined(username: string) {
@@ -77,6 +85,7 @@ export class LobbyComponent {
   getQuestions() {
     this.service.getQuestions().subscribe(resp => {
       this.questions = resp;
+      console.log(this.questions[0].name);
     }, error => console.error(error));
 
     
@@ -93,7 +102,6 @@ export class LobbyComponent {
         answer.classList.remove('answer');
         answer.classList.add('answer-selected');
         answer.disabled = true;
-        this.connection.invoke("ShowAnswer", answer.innerText);
       } else {
         answer = <HTMLInputElement>document.getElementById(id);
         answer.classList.remove('answer');
