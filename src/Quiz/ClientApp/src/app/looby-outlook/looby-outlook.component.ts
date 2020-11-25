@@ -16,6 +16,8 @@ export class LoobyOutlookComponent implements OnInit {
 
   connection: signalR.HubConnection
 
+  actualpage = "hello-page"
+
   constructor(private router: Router, hubbuilder: HubBuilderService) {
     this.users = [];
     this.connection = hubbuilder.getConnection()
@@ -52,6 +54,9 @@ export class LoobyOutlookComponent implements OnInit {
     this.router.navigate(['/lobby']);
   }
 
+  JoinOnClick(){
+    this.actualpage = "lobbypage"
+  }
 
 
 }
