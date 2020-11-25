@@ -14,11 +14,11 @@ namespace Quiz.Models
 
     }
         public enum QuizState
-    {
-        Start,
-        Showquestion,
-        Showanswer,
-        Questionresult,
-        Quizresult
-    }
+        {
+            Start,
+            Showquestion,
+            Showanswer,
+            Questionresult,
+            Quizresult
+         }
 }

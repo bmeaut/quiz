@@ -14,14 +14,19 @@ namespace Quiz.Data
     {
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
+<<<<<<< Updated upstream
+
+=======
         public DbSet<QuizInstance> QuizInstances { get; set; }
         public DbSet<AnswerInstance> AnswerInstances { get; set; }
-
+        public DbSet<User> Players { get; set; }
+        
+>>>>>>> Stashed changes
         public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
-
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

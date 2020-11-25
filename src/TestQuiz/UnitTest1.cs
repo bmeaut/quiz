@@ -4,44 +4,55 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Quiz.Models;
 using Quiz.Services;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.Extensions.Options;
+using IdentityServer4.EntityFramework.Options;
 
 namespace TestQuiz
 {
     [TestClass]
     public class UnitTest1
     {
-        [TestMethod]
-        public void TestInit()
+        private ApplicationDbContext _context;
+        private QuizService quizService;
+
+        [TestInitialize]
+        public void Setup()
         {
           
-            using (var db = createDbContext())
+        }
+
+
+        [TestMethod]
+        public void TestMethod1()
+        {
+            using (_context)
             {
-                QuizService qs = new QuizService(db, null);
-                var quizInstanceid = qs.Start();
-                var quiz = db.QuizInstances.Find(quizInstanceid);
-                Assert.IsNotNull(quiz);
-                Assert.AreEqual(1, quiz.Id);
+                int quizInstanceid = quizService.Start();
+                var quizTest = _context.QuizInstances.Find(quizInstanceid);
+                Assert.IsNotNull(quizTest);
+                Assert.AreEqual(1, quizTest.Id);
 
-                qs.Next(quizInstanceid);
-                Assert.AreEqual(QuizState.Showquestion, quiz.State);
+                quizService.Next(quizInstanceid);
+                Assert.AreEqual(QuizState.Showquestion, quizTest.State);
 
-                qs.SetAnswer(quizInstanceid, 1,1,new User {UserId = 1,Name ="Adam1" });
-                qs.SetAnswer(quizInstanceid, 1,2,new User {UserId = 2,Name ="Vincent Vega" });
-                qs.SetAnswer(quizInstanceid, 1,3,new User {UserId = 3,Name ="Mia Wallace" });
+                quizService.SetAnswer(quizInstanceid, 1,1,new User {UserId = 1,Name ="Adam1" });
+                quizService.SetAnswer(quizInstanceid, 1,2,new User {UserId = 2,Name ="Vincent Vega" });
+                quizService.SetAnswer(quizInstanceid, 1,3,new User {UserId = 3,Name ="Mia Wallace" });
 
-                var answerIns = db.AnswerInstances.Where(a => a.Score == 1).SingleOrDefault();
+                var answerIns = _context.AnswerInstances.Where(a => a.Score == 1).SingleOrDefault();
                 Assert.AreEqual("Adam", answerIns.User.Name);
 
             }
 
         }
         [TestMethod]
-        public void TestMethod1()
+        public void TestMethod2()
         {
 
             using (var db = createDbContext())
             {
-                
+                    
 
             }
 
@@ -52,8 +63,8 @@ namespace TestQuiz
             var contextOptionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             contextOptionsBuilder.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = aspnet" +
                 " - Quiz - 53bc9b9d - 9d6a - 45d4 - 8429 - 2a2761773502; Trusted_Connection = True; MultipleActiveResultSets = true");
-
-            return new ApplicationDbContext(contextOptionsBuilder.Options,null);
+            return new ApplicationDbContext(contextOptionsBuilder.Options, null);
         }
     }
+
 }
