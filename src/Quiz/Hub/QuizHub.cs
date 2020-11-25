@@ -5,32 +5,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Quiz.Services;
 
 namespace Quiz.Hub
 {
     public class QuizHub : Hub<IQuizClient>
     {
+
         Random r = new Random();
-        private readonly QuizService _quizService;
-
-
-        public QuizHub(QuizService qs)
-        {
-            _quizService = qs;
-            _quizService.setQuizClient(this);
-        }
-        
 
         public static HubRoom Lobby { get; } = new HubRoom 
         { 
             Name = "QuizRoom"
+        
         };
 
         public class HubRoom
         {
 
             public string Name { get; set; }
+
+
 
             public List<User> users = new List<User>();
 

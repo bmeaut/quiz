@@ -10,97 +10,80 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Quiz.Services
 {
-    public class QuizService : IQuizService
+    public class QuizService
     {
         private readonly ApplicationDbContext _context;
+        private List<Question> questions;
         int currentQuestionId;
-        private QuizHub quizHub;
-        Question currentQuestion;
+        private List<Answer> currentAnswers;
+        private IQuizClient quizClient;
 
-        public QuizService(ApplicationDbContext context) {
+        public QuizService(ApplicationDbContext context, IQuizClient qc) { 
             _context = context;
-            // ez nemjó -- questions = context.Questions.ToList();
-        }
-
-        public void setQuizClient(QuizHub qHub)
-        {
-            this.quizHub = qHub;
+            questions = context.Questions.ToList();
+            quizClient = qc;
         }
         public int Start()
         {
             currentQuestionId = 1;
-            QuizInstance quiz = new QuizInstance { State = QuizState.Start, QuestionId = _context.Questions.Find(currentQuestionId).Id };
+            QuizInstance quiz = new QuizInstance { State = QuizState.Start, QuestionId = questions[currentQuestionId].Id };
             _context.Add(quiz);
             _context.SaveChanges();
-            int quizInstanceId = quiz.Id;
-            return quizInstanceId;
+            int QuizInstanceid = quiz.Id;
+            return QuizInstanceid;
         }
 
-        public void Next(int quizInstanceId)
+        public void Next(int quizInstanceid)
         {
-            QuizInstance quizInstance = _context.QuizInstances.Find(quizInstanceId);
-            
-            switch (quizInstance.State)
+            QuizInstance qi = _context.QuizInstances.Find(quizInstanceid);
+            switch (qi.State)
             {
                 case QuizState.Start:
-                    quizInstance.State = QuizState.Showquestion;
-                    currentQuestion = this.getCurrentQuestion(quizInstance);
-                    //quizHub.SendQuestion()
+                    qi.State = QuizState.Showquestion;
+                    currentAnswers = _context.Answers.Where(a => a.QuestionID == qi.QuestionId).ToList();
+                    //ShowQuestion(int questionId, string question, Answer[4]{string answerText, int
                     break;
                 case QuizState.Showquestion:
-                    quizInstance.State = QuizState.Showanswer;
-                    currentQuestion = this.getCurrentQuestion(quizInstance);
-                    foreach (var a in currentQuestion.Answers)
+                    qi.State = QuizState.Showanswer;
+                    foreach (var a in currentAnswers)
                     {
                             if (a.IsCorrect)
                             {
-                                //quizHub.ShowAnswer(string question, UserAnswer[]{string answertext,bool isCorrect, int answerCount})
+                                //ShowAnswer(string question, UserAnswer[]{string answertext,bool isCorrect, int answerCount})
                                 break;
                             }
                     }
                     break;
                 case QuizState.Showanswer:
-                    currentQuestion = this.getCurrentQuestion(quizInstance);
-                    if (quizInstance.QuestionId == this.QuestionCount() || quizInstance.QuestionId > this.QuestionCount())
+                    if (qi.QuestionId == questions.Count)
                     {
-                        quizInstance.State = QuizState.Quizresult;
-                        var ansIn = _context.AnswerInstances.Where(a => a.Id == quizInstance.AnswerInstance.Id);
+
+                        qi.State = QuizState.Quizresult;
+                        var ansIn = _context.AnswerInstances.Where(a => a.Id == qi.AnswerInstance.Id);
                         var grouped = ansIn.GroupBy(a => a.User, a => a.Score, (key, value) => new { User = key, Score = value });
                         List<UserScore> scores = _context.AnswerInstances.GroupBy(a => a.User).Select(ai => new UserScore
                         { user = ai.Key, sumScore = ai.Sum(a => a.Score) }).OrderByDescending(a => a.sumScore).ToList();
-
 
                         //ShowQuestionResults(UserResult[10]{string name, int score})
                     }
                     else
                     {
-                        quizInstance.QuestionId =+1;
+                        currentQuestionId++;
+                        qi.QuestionId = currentQuestionId;
                     }
                     break;
                 case QuizState.Questionresult:
                     //Finish
-                    break;
+                    
                 case QuizState.Quizresult:
-                    break;
                 default: return;
             }
-        }
-
-        private int QuestionCount()
-        {
-            return _context.Questions.ToList().Count;
-        }
-
-        private Question getCurrentQuestion(QuizInstance quizInstance)
-        {
-            currentQuestion = (Question)_context.Questions.Include(q => q.Answers).Where(q => q.Id == quizInstance.QuestionId);
-            return currentQuestion;
         }
 
         public class UserScore
         {
            public User user { get; set; }
-           public int sumScore { get; set; }
+            public int sumScore { get; set; }
         }
 
         public void SetAnswer(int quizInstanceId, int questionId, int answerId, User user)
