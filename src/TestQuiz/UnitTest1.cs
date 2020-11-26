@@ -25,12 +25,7 @@ namespace TestQuiz
                 qs.Next(quizInstanceid);
                 Assert.AreEqual(QuizState.Showquestion, quiz.State);
 
-                qs.SetAnswer(quizInstanceid, 1,1,new User {UserId = 1,Name ="Adam1" });
-                qs.SetAnswer(quizInstanceid, 1,2,new User {UserId = 2,Name ="Vincent Vega" });
-                qs.SetAnswer(quizInstanceid, 1,3,new User {UserId = 3,Name ="Mia Wallace" });
-
-                var answerIns = db.AnswerInstances.Where(a => a.Score == 1).SingleOrDefault();
-                Assert.AreEqual("Adam", answerIns.User.Name);
+            
 
             }
 
