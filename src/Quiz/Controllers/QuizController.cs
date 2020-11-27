@@ -22,17 +22,23 @@ namespace Quiz.Controllers
             return quizService.Start();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("next/{id}")]
         public void Next(int id)
         {
             quizService.Next(id);
         }
 
         [HttpPost]
-        public void SetAnswer(int quizInstanceId, int questionId, int answerId) 
+        public void SetAnswer(int[] parameters) 
         {
             //, HubConnectionContext connectionContext => , connectionContext.UserIdentifier
-            quizService.SetAnswer(quizInstanceId, questionId, answerId,"dummyUser");
+            quizService.SetAnswer(parameters[0], parameters[1], parameters[2],"dummyUser");
+        }
+
+        public class AnswerSubmit{
+            public int quizId { get; }
+            public int questionId { get; }
+            public int answerId { get; }
         }
 
     }

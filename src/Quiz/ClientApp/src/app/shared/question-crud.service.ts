@@ -4,6 +4,8 @@ import { Injectable, Inject, EventEmitter } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { QuizInstance } from './quiz-instance';
+import { AnswerSubmit } from './answer-submit';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +50,18 @@ export class QuestionCrudService {
 
   deleteQuestion(id) {
     return this.httpClient.delete<Question>(this.baseUrl + 'api/Questions/' + id);
+  }
+
+  getQuizInstanceId(){
+    return this.httpClient.get<number>(this.baseUrl + 'api/Quiz');
+  }
+
+  quizNext(quizInstanceId: number){
+    return this.httpClient.get<number>(this.baseUrl + 'api/Quiz/next/'+ quizInstanceId);
+  }
+
+  submitAnswer(params: number[]){
+    return this.httpClient.post<AnswerSubmit>(this.baseUrl + 'api/Quiz',params);
   }
 
   /*

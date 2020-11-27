@@ -20,46 +20,38 @@ export class LobbyComponent implements OnInit {
   questions: Question[];
 
   currentQuestion: Question;
-  currentQuestionId: number;
   currentAnswers: Answer[];
+  QuizId: number;
 
   connection: signalR.HubConnection;
 
   constructor(private service: QuestionCrudService, hubBuilder: HubBuilderService, private router: Router) {
 
     this.connection = hubBuilder.getConnection();
-    this.currentQuestionId = 0;
     
 
-    this.connection.on("ShowQuestion", qId => this.showQuestion(qId));
+    this.connection.on("ShowQuestion", q => this.showQuestion(q));
     this.connection.on("ShowAnswer", (answer, user) => this.showAnswer(answer, user));
     this.connection.on("ShowResults", () => this.showQuizResults());
   }
   ngOnInit(): void {
-    this.getQuestions();
-    this.connection.start().then(() => {
-      this.connection.invoke("SendQuestion", 0)
-    });
+
+    this.connection.start();
+    this.service.getQuizInstanceId().subscribe(resp => {
+      this.QuizId = resp;
+    }, error => console.error(error));
+    this.nextQuestion();
   }
 
   nextQuestion() {
-
-    var nextId = this.currentQuestionId + 1;
-
-    if (nextId == this.questions.length) {
-      this.connection.invoke("EndGame");
-    }
-
-    this.currentAnswers = null;
-    this.connection.invoke("SendQuestion", this.currentQuestionId+1);
+    this.service.quizNext(this.QuizId);
   }
 
-  showQuestion(id: number) {
-    const ids: string[] = ["answerA", "answerB", "answerC", "answerD"];
-
-    this.currentQuestion = this.questions[id];
-
-    this.currentQuestionId = id;
+  showQuestion(newQuestion: Question) {
+  const ids: string[] = ["answerA", "answerB", "answerC", "answerD"];
+  this.currentQuestion= newQuestion;
+  console.log(this.currentQuestion.text);
+  console.log(this.currentQuestion.answers[1]);
 
     let answer;
     for (let id of ids) {
@@ -71,7 +63,7 @@ export class LobbyComponent implements OnInit {
   }
 
   showAnswer(answer: string, user: string) {
-    
+      
   }
 
   showQuizResults() {
@@ -87,8 +79,6 @@ export class LobbyComponent implements OnInit {
       this.questions = resp;
       console.log(this.questions[0].name);
     }, error => console.error(error));
-
-    
   }
   
 
@@ -109,7 +99,6 @@ export class LobbyComponent implements OnInit {
         answer.disabled = true;
       }
     }
-
 
   }
 }

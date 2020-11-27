@@ -14,14 +14,14 @@ namespace Quiz.Services
     public class QuizService : IQuizService
     {
         private readonly ApplicationDbContext _context;
-        private IHubContext<QuizHub> _hubContext;
+        private readonly IHubContext<QuizHub, IQuizClient> quizHub;
         Question currentQuestion;
         int currentQuestionId;
 
-        public QuizService(ApplicationDbContext context, IHubContext<QuizHub> qh)
+        public QuizService(ApplicationDbContext context, IHubContext<QuizHub, IQuizClient> qH)
         {
             _context = context;
-            _hubContext = qh;
+            quizHub = qH;
         }
 
         public int Start()
@@ -44,12 +44,13 @@ namespace Quiz.Services
                     quizInstance.State = QuizState.Showquestion;
                     currentQuestion = this.getCurrentQuestion(quizInstance);
                     _context.SaveChanges();
-                    //quizHub.SendQuestion()
+                    quizHub.Clients.All.ShowQuestion(currentQuestion);
                     break;
                 case QuizState.Showquestion:
                     quizInstance.State = QuizState.Showanswer;
                     _context.SaveChanges();
                     currentQuestion = this.getCurrentQuestion(quizInstance);
+                    quizHub.Clients.All.ShowQuestion(currentQuestion);
                     break;
                 case QuizState.Showanswer:
                     currentQuestion = this.getCurrentQuestion(quizInstance);
@@ -80,32 +81,7 @@ namespace Quiz.Services
                     currentQuestion = this.getCurrentQuestion(quizInstance);
                     if (quizInstance.QuestionId == this.QuestionCount() || quizInstance.QuestionId > this.QuestionCount())
                     {
-                        /*
-                         // egy masik approach
-                         * quizInstance.State = QuizState.Quizresult;
-                         var allAnswers = quizInstance.SubmittedAnswers.ToList();
-
-                         var userScores = new Dictionary<string, int>();
-
-                         foreach(var ans in allAnswers)
-                         {
-                             if (userScores.ContainsKey(ans.User))
-                                 userScores[ans.User] = ans.Score;
-                             else
-                             {
-                                 userScores.Add(ans.User, ans.Score);
-                             }
-                         }
-                         var topPlayers = new Dictionary<string, int>();
-
-                         //top 3 jatékos: i < 3
-                         for (int i = 0; i < 3; i++)
-                         {
-                             var topscore = userScores.Values.Max();
-                             var 
-                             topPlayers.Add()
-                         }*/
-
+                        
                         var ansIn = _context.AnswerInstances.ToList();
                         var grouped = ansIn.GroupBy(a => a.User, a => a.Score, (key, value) => new { User = key, Score = value });
                         List<UserScore> scores = _context.AnswerInstances.GroupBy(a => a.User).Select(ai => new UserScore
