@@ -10,7 +10,7 @@ namespace Quiz.Hub
 {
     public class QuizHub : Hub<IQuizClient>
     {
-
+        
         Random r = new Random();
 
         public static HubRoom Lobby { get; } = new HubRoom 
@@ -56,11 +56,11 @@ namespace Quiz.Hub
 
         }
 
-        public async Task SendQuestion(int questionId)
+        public async Task SendQuestion(Question q)
         {
             Console.WriteLine();
-            Console.WriteLine("Calling ShowQuestion with id: "+questionId);
-            await Clients.All.ShowQuestion(questionId);
+            Console.WriteLine("Calling ShowQuestion with id: "+q.Id);
+            await Clients.All.ShowQuestion(q);
         }
 
         public async Task EndGame()
