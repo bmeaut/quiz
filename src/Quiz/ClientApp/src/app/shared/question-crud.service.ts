@@ -57,7 +57,7 @@ export class QuestionCrudService {
   }
 
   quizNext(quizInstanceId: number){
-    return this.httpClient.get<number>(this.baseUrl + 'api/Quiz/next/'+ quizInstanceId);
+    return this.httpClient.get<Question>(this.baseUrl + 'api/Quiz/next/'+ quizInstanceId);
   }
 
   submitAnswer(params: number[]){

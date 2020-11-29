@@ -8,6 +8,7 @@ using System.Linq;
 using Quiz.Hub;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.AspNetCore.SignalR;
+using System;
 
 namespace Quiz.Services
 {
@@ -26,6 +27,7 @@ namespace Quiz.Services
 
         public int Start()
         {
+            Console.WriteLine("Start called");
             currentQuestionId = 1;
             QuizInstance quiz = new QuizInstance { State = QuizState.Start, QuestionId = _context.Questions.Find(currentQuestionId).Id };
             _context.Add(quiz);
@@ -45,6 +47,7 @@ namespace Quiz.Services
                     currentQuestion = this.getCurrentQuestion(quizInstance);
                     _context.SaveChanges();
                     quizHub.Clients.All.ShowQuestion(currentQuestion);
+                    Console.WriteLine("Start->Showquestion"+currentQuestion.Id);
                     break;
                 case QuizState.Showquestion:
                     quizInstance.State = QuizState.Showanswer;

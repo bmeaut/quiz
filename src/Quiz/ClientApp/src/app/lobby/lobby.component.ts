@@ -17,8 +17,6 @@ export class LobbyComponent implements OnInit {
 
   users: string[];
 
-  questions: Question[];
-
   currentQuestion: Question;
   currentAnswers: Answer[];
   QuizId: number;
@@ -39,15 +37,22 @@ export class LobbyComponent implements OnInit {
     this.connection.start();
     this.service.getQuizInstanceId().subscribe(resp => {
       this.QuizId = resp;
-    }, error => console.error(error));
-    this.nextQuestion();
+    },
+      error => {
+        console.error(error)
+      },
+      () =>  this.nextQuestion());
+    
   }
 
   nextQuestion() {
-    this.service.quizNext(this.QuizId);
+    this.service.quizNext(this.QuizId).subscribe(resp => {
+      this.currentQuestion = resp;
+    });
   }
 
   showQuestion(newQuestion: Question) {
+    console.log("client.showQuestion Called");
   const ids: string[] = ["answerA", "answerB", "answerC", "answerD"];
   this.currentQuestion= newQuestion;
   console.log(this.currentQuestion.text);
@@ -73,14 +78,6 @@ export class LobbyComponent implements OnInit {
   userJoined(username: string) {
     this.users.push(username);
   }
-
-  getQuestions() {
-    this.service.getQuestions().subscribe(resp => {
-      this.questions = resp;
-      console.log(this.questions[0].name);
-    }, error => console.error(error));
-  }
-  
 
   answerSelected(event: Event): void {
     const ids: string[] = ["answerA", "answerB", "answerC", "answerD"];
