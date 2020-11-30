@@ -28,7 +28,7 @@ export class LobbyComponent implements OnInit {
     this.connection = hubBuilder.getConnection();
     
 
-    this.connection.on("ShowQuestion", q => this.showQuestion(q));
+    this.connection.on("ShowQuestion", q => this.ShowQuestion(q));
     this.connection.on("ShowAnswer", (answer, user) => this.showAnswer(answer, user));
     this.connection.on("ShowResults", () => this.showQuizResults());
   }
@@ -51,7 +51,7 @@ export class LobbyComponent implements OnInit {
     });
   }
 
-  showQuestion(newQuestion: Question) {
+  ShowQuestion(newQuestion: Question) {
     console.log("client.showQuestion Called");
   const ids: string[] = ["answerA", "answerB", "answerC", "answerD"];
   this.currentQuestion= newQuestion;

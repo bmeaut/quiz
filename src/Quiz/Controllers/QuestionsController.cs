@@ -78,16 +78,30 @@ namespace Quiz.Controllers
             return NoContent();
         }
 
+        /*
+          public async Task<ActionResult<Question>> PostQuestion(Question question)
+        {
+            _context.Questions.Add(question);
+            await _context.SaveChangesAsync();
+
+
+            return CreatedAtAction("GetQuestion", new { id = question.Id }, question);
+        }
+         * */
+
+
         // POST: api/Questions
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Question>> PostQuestion(Question question)
         {
-            _context.Questions.Add(question);
+            var newQuestion = question;
+            _context.Questions.Add(newQuestion);
             await _context.SaveChangesAsync();
+            newQuestion.Id = newQuestion.Id;
 
-            return CreatedAtAction("GetQuestion", new { id = question.Id }, question);
+            return newQuestion;
         }
 
         // DELETE: api/Questions/5

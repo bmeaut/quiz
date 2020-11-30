@@ -18,6 +18,7 @@ namespace Quiz.Services
         private readonly IHubContext<QuizHub, IQuizClient> quizHub;
         Question currentQuestion;
         int currentQuestionId;
+        static int previousQuestionId;
 
         public QuizService(ApplicationDbContext context, IHubContext<QuizHub, IQuizClient> qH)
         {
@@ -65,14 +66,16 @@ namespace Quiz.Services
                             break;
                         }
                     }
-                    if (currentQuestion.Id == _context.Questions.Count())
+                    // ha a kérdés Id-ja megegyezik a legmagasabb Idju kérdés id-val akkor ez az utlsó kérdés
+                    var lastQuestionId = _context.Questions.OrderByDescending(q => q.Id).FirstOrDefault().Id;
+                    if (currentQuestion.Id == lastQuestionId)
                     {
                         quizInstance.State = QuizState.Questionresult;
                     }
                     else
                     {
                         quizInstance.State = QuizState.Showquestion;
-                        quizInstance.QuestionId++;
+                        quizInstance.QuestionId = currentQuestion.Id+1;
                     }
                     _context.SaveChanges();
                     break;
@@ -107,7 +110,7 @@ namespace Quiz.Services
 
         private Question getCurrentQuestion(QuizInstance quizInstance)
         {
-            currentQuestion = _context.Questions.Where(q => q.Id == quizInstance.QuestionId).Include(q => q.Answers).SingleOrDefault();
+            currentQuestion = _context.Questions.Where(q => q.Id == quizInstance.QuestionId || q.Id > quizInstance.QuestionId).Include(q => q.Answers).FirstOrDefault();
             return currentQuestion;
         }
 
