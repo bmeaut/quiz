@@ -1,23 +1,24 @@
-<div [ngSwitch]="actualpage">
-  <div *ngSwitchCase="'hello-page'">
-    <div class="base">
-      <h1 class= "hello">Hello Béla!</h1>
-      <nav>
-        <button class="button" (click)="JoinOnClick()">Csatlakozz a kvízhez!</button>
-      </nav> 
-    </div>
+<div [ngSwitch]="actualpage" class="container">
+  <div *ngSwitchCase="'hello-page'" class="wrap">
+      <span class= "title">Hello Béla!</span>
+      <button class="join-button" (click)="JoinOnClick()">Csatlakozz a kvízhez!</button>
   </div>
 
-  <div *ngSwitchCase="'lobbypage'">
-    <h1 class="waitText">Még várunk egy kicsit a többiekre...</h1>
-    <hr>
-    <div class="loader"></div>
-      <div *ngFor="let user of users" >
-        <div>
-          {{user.name}}
-        </div>
+  <div *ngSwitchCase="'lobbypage'" class="wrap">
+
+    <span class="title">Még várunk egy kicsit a többiekre...</span>
+
+    <div *ngFor="let user of users">
+      <div class="users">
+        <span class="username">{{user.name}}</span>
       </div>
-    <button class="btn" (click)="onStart()">Start Game</button>
+    </div>
+
+    <div class="loader-container">
+      <div class="loader"></div>
+    </div>
+    <button class="join-button" (click)="onStart()">Játék indítása</button>
+
   </div>
 
   <div *ngSwitchDefault>Nem töltött be egy komponenst se, ez default!!</div>
